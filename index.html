@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Store</title>
+<style>
+:root {
+  --bg: #0b0f19;
+  --panel: #141b2b;
+  --panel2: #1b2539;
+  --accent: #8b5cf6;
+  --green: #22c55e;
+  --red: #ef4444;
+  --text: #f8fafc;
+  --muted: #9ca3af;
+  --border: #29354a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+button, input, select, textarea { font: inherit; }
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 16px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+button:hover { filter: brightness(1.12); }
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.primary { background: var(--accent); color: white; }
+.secondary {
+  background: var(--panel2);
+  color: white;
+  border: 1px solid var(--border);
+}
+.danger { background: #7f1d1d; color: white; }
+.success { background: #166534; color: white; }
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(11,15,25,.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.logo { font-size: 23px; font-weight: 900; }
+.logo span { color: var(--accent); }
+.nav-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hero {
+  text-align: center;
+  padding: 75px 20px 60px;
+  background:
+    radial-gradient(ellipse at top, #33205c 0%, transparent 60%),
+    var(--bg);
+}
+.hero h1 {
+  font-size: clamp(36px, 6vw, 65px);
+  margin: 0 0 15px;
+}
+.hero h1 span { color: #a78bfa; }
+.hero p {
+  color: var(--muted);
+  max-width: 650px;
+  margin: 0 auto 25px;
+  line-height: 1.7;
+}
+.badge {
+  display: inline-block;
+  background: #291d47;
+  border: 1px solid #5b3a91;
+  color: #c4b5fd;
+  border-radius: 30px;
+  padding: 8px 13px;
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+.container {
+  width: min(1200px, 100%);
+  margin: auto;
+  padding: 25px 20px 70px;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.section-title h2 { margin: 0; }
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.product {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 22px;
+  transition: transform .2s, border-color .2s;
+  min-width: 0;
+}
+.product:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+.product-icon {
+  height: 105px;
+  display: grid;
+  place-items: center;
+  font-size: 57px;
+  background: var(--panel2);
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+.product h3 { margin: 0 0 9px; }
+.product p {
+  color: var(--muted);
+  min-height: 38px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.price {
+  color: #c4b5fd;
+  font-size: 24px;
+  font-weight: 900;
+  margin: 18px 0;
+}
+.product button { width: 100%; }
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+.panel h2, .panel h3 { margin-top: 0; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+.field label {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: bold;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  color: white;
+  background: #0b1220;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+}
+textarea { min-height: 85px; resize: vertical; }
+.muted { color: var(--muted); }
+.hidden { display: none !important; }
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.row > * { flex: 1; }
+.cart-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cart-line:last-child { border-bottom: none; }
+.cart-line .line-info { flex: 1; }
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+}
+.total-line.final {
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  padding-top: 16px;
+  font-size: 21px;
+  font-weight: 900;
+}
+.notice {
+  padding: 13px;
+  border-radius: 9px;
+  margin: 12px 0;
+  background: #172554;
+  color: #bfdbfe;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.notice.error { background: #451a1a; color: #fecaca; }
+.notice.good { background: #14532d; color: #bbf7d0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+th { color: #c4b5fd; background: #101727; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.status {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: bold;
+  background: #14532d;
+  color: #bbf7d0;
+}
+.status.off { background: #451a1a; color: #fecaca; }
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.stat {
+  padding: 19px;
+  border-radius: 12px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+}
+.stat small {
+  color: var(--muted);
+  display: block;
+  margin-bottom: 9px;
+}
+.stat strong { font-size: 25px; overflow-wrap: anywhere; }
+footer {
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding: 28px 20px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(0,0,0,.8);
+  display: grid;
+  place-items: center;
+  padding: 15px;
+  overflow-y: auto;
+}
+.modal {
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+}
+.modal h2 { margin-top: 0; }
+.big-code {
+  font-family: monospace;
+  font-size: 20px;
+  color: #c4b5fd;
+  font-weight: bold;
+  padding: 16px;
+  background: #090d16;
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  margin: 15px 0;
+}
+.small-btn { padding: 7px 10px; font-size: 12px; }
+@media (max-width: 900px) {
+  .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .products { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .nav { padding: 12px; }
+  .logo { font-size: 19px; }
+  .nav-actions button { padding: 9px 10px; font-size: 12px; }
+  .hero { padding-top: 50px; }
+  .container { padding-left: 13px; padding-right: 13px; }
+  .panel { padding: 15px; }
+  .cart-line { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="logo">NEXUS <span>STORE</span></div>
+    <div class="nav-actions">
+      <button class="secondary" onclick="scrollToStore()">Shop</button>
+      <button class="secondary" onclick="scrollToCart()">
+        Cart (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </div>
+</header>
+<section class="hero">
+  <div class="badge">WELCOME TO NEXUS STORE</div>
+  <h1>Upgrade your <span>adventure</span></h1>
+  <p>Discover exclusive Nexus ranks and Minecraft items.</p>
+  <button class="primary" onclick="scrollToStore()">Explore the shop</button>
+</section>
+<main class="container">
+  <section id="storeSection">
+    <div class="section-title">
+      <h2>Featured products</h2>
+      <span class="muted">Choose your items</span>
+    </div>
+    <div id="products" class="products"></div>
+  </section>
+  <div style="height:30px"></div>
+  <section id="cartSection" class="panel">
+    <h2>Your cart</h2>
+    <div id="cartItems"></div>
+    <div class="field" style="margin-top:20px">
+      <label for="voucherInput">Voucher code</label>
+      <div class="row">
+        <input id="voucherInput" placeholder="Enter voucher code"
+          maxlength="60" autocomplete="off">
+        <button type="button" class="secondary" onclick="applyVoucher()">Apply</button>
+      </div>
+      <div id="voucherMessage" class="muted" aria-live="polite"></div>
+    </div>
+    <div class="total-line"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+    <div class="total-line"><span>Discount</span><span id="discount">-$0.00</span></div>
+    <div class="total-line final"><span>Total</span><span id="total">$0.00</span></div>
+    <div class="field" style="margin-top:18px">
+      <label for="customerName">Minecraft username</label>
+      <input id="customerName" placeholder="Enter your username" maxlength="80">
+    </div>
+    <div class="field">
+      <label for="contactType">Contact method</label>
+      <select id="contactType">
+        <option value="discord">Discord</option>
+        <option value="email">Email</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="customerContact">Discord username or email</label>
+      <input id="customerContact" placeholder="Enter your Discord username or email" maxlength="150">
+    </div>
+    <button id="checkoutButton" class="primary" style="width:100%" onclick="checkout()">
+      Continue to PayPal
+    </button>
+    <p class="muted" style="font-size:12px;line-height:1.6">
+      Payment is processed by PayPal. Your order is confirmed only after payment is verified.
+    </p>
+    <div id="paymentMessage" class="muted" role="status"></div>
+  </section>
+  <section id="orderResult" class="panel hidden">
+    <h2>Thank you for your purchase!</h2>
+    <p>Copy your verification code and include it when you open a support ticket in our Discord.</p>
+    <div id="orderCode" class="big-code"></div>
+    <div class="row">
+      <button class="primary" onclick="copyOrderCode()">Copy purchase code</button>
+      <button class="secondary" onclick="openTicket()">Open support ticket</button>
+    </div>
+    <div id="ticketMessage" class="muted"></div>
+  </section>
+</main>
+<footer>
+  <strong>NEXUS STORE</strong><br>
+  Minecraft ranks and items.<br>
+  Independent store. Not affiliated with Mojang or Microsoft.
+</footer>
+
+<!-- Second step for admin login. It does not change the page design/CSS. -->
+<div id="adminSignInModal" class="modal-backdrop hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminSignInTitle">
+    <h2 id="adminSignInTitle">Admin Sign in</h2>
+    <p class="muted">Enter your second admin sign-in code to continue.</p>
+    <form onsubmit="submitAdminSignIn(event)">
+      <div class="field">
+        <label for="adminSecondPassword">Second sign-in code</label>
+        <input id="adminSecondPassword" type="password"
+          autocomplete="current-password" maxlength="200" required>
+      </div>
+      <div id="adminSignInMessage" aria-live="polite"></div>
+      <div class="row">
+        <button class="primary" type="submit" id="adminSignInButton">Sign in</button>
+        <button class="secondary" type="button" onclick="cancelAdminSignIn()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="adminModal" class="modal-backdrop hidden">
+  <div class="modal" style="width:min(1150px,100%);max-height:95vh">
+    <div class="row">
+      <div>
+        <h2 style="margin-bottom:4px">Nexus Store Admin</h2>
+        <p class="muted" style="margin-top:0">Manage products, vouchers and orders.</p>
+      </div>
+      <button class="secondary" style="flex:0" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="row" style="margin-bottom:20px">
+      <button class="secondary" onclick="loadAdminData()">Refresh data</button>
+      <button class="danger" onclick="closeAdmin()">Close panel</button>
+    </div>
+    <div class="admin-grid">
+      <div class="stat"><small>Total orders</small><strong id="statOrders">0</strong></div>
+      <div class="stat"><small>Total sales</small><strong id="statSales">$0.00</strong></div>
+      <div class="stat"><small>Voucher codes</small><strong id="statVouchers">0</strong></div>
+      <div class="stat"><small>Active vouchers</small><strong id="statActiveVouchers">0</strong></div>
+    </div>
+    <section class="panel">
+      <h3>Create a voucher</h3>
+      <form onsubmit="createVoucher(event)">
+        <div class="field">
+          <label for="newVoucherCode">Voucher code</label>
+          <input id="newVoucherCode" maxlength="60" required>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="newVoucherDiscount">Discount percentage</label>
+            <input id="newVoucherDiscount" type="number" min="1" max="100" value="10" required>
+          </div>
+          <div class="field">
+            <label for="newVoucherLimit">Maximum uses</label>
+            <input id="newVoucherLimit" type="number" min="1" max="1000000" value="1" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="newVoucherNote">Admin note (optional)</label>
+          <input id="newVoucherNote" maxlength="200">
+        </div>
+        <button class="primary" style="width:100%">Create voucher</button>
+        <div id="voucherCreateMessage"></div>
+      </form>
+    </section>
+    <section class="panel">
+      <h3>Voucher management</h3>
+      <div id="voucherTable"></div>
+    </section>
+    <section class="panel">
+      <h3>Orders and purchase codes</h3>
+      <div id="orderTable"></div>
+    </section>
+    <section class="panel">
+      <h3>Manage products and ranks</h3>
+      <form id="productForm" onsubmit="saveProduct(event)">
+        <div class="field">
+          <label for="editProductId">Choose product</label>
+          <select id="editProductId" onchange="loadProductForEdit()">
+            <option value="">Create a new product</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="editProductName">Product name</label>
+            <input id="editProductName" maxlength="100" required>
+          </div>
+          <div class="field">
+            <label for="editProductPrice">Price (USD)</label>
+            <input id="editProductPrice" type="number" min="0" max="1000000" step="0.01" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="editProductIcon">Icon / emoji</label>
+            <input id="editProductIcon" maxlength="10" required>
+          </div>
+          <div class="field">
+            <label for="editProductDescription">Description</label>
+            <input id="editProductDescription" maxlength="200" required>
+          </div>
+        </div>
+        <div class="row">
+          <button class="primary">Save product</button>
+          <button class="secondary" type="button" onclick="resetProductForm()">Clear form</button>
+        </div>
+      </form>
+      <div id="productAdminTable" style="margin-top:18px"></div>
+    </section>
+    <section class="panel">
+      <h3>Discord support</h3>
+      <div class="field">
+        <label for="ticketUrl">Discord ticket URL</label>
+        <input id="ticketUrl" type="url" placeholder="https://discord.com/channels/...">
+      </div>
+      <button class="secondary" type="button" onclick="saveTicketLink()">Save ticket link</button>
+      <div style="margin-top:22px">
+        <h3>Export store data</h3>
+        <div class="row">
+          <button type="button" class="secondary" onclick="exportDataJSON()">Download JSON backup</button>
+          <button type="button" class="secondary" onclick="exportOrdersCSV()">Download orders CSV</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* Use the actual product IDs from the current store API response. */
+const PRODUCT_ORDER = [
+  'nexus-plus',
+  'nexus-plus-plus',
+  'nexus-plus-triple',
+  'elytra',
+  'common-key',
+  'amethyst-key',
+  'crimson-key',
+  'prime-key',
+  'gold-key'
+];
+
+const DEFAULT_PRODUCT_ICONS = {
+  'nexus-plus': '💜',
+  'nexus-plus-plus': '⚡',
+  'nexus-plus-triple': '👑',
+  'elytra': '🪽',
+  'common-key': '🗝️',
+  'amethyst-key': '🔮',
+  'crimson-key': '🟥',
+  'prime-key': '💎',
+  'gold-key': '🪙'
+};
+
+let products = [];
+let vouchers = [];
+let orders = [];
+let cart = {};
+let appliedVoucher = null;
+let currentPurchaseCode = '';
+let adminToken = '';
+let adminLoggedIn = false;
+let adminChallengeToken = '';
+let currency = 'USD';
+let ticketUrl = '';
+
+const money = amount => new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: currency || 'USD'
+}).format(Number(amount || 0));
+
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[c]));
+
+const idOf = product => String(product?.id ?? product?._id ?? '');
+
+async function api(url, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {})
+  };
+
+  if (adminToken) {
+    headers.Authorization = 'Bearer ' + adminToken;
+  }
+
+  let response;
+
+  try {
+    response = await fetch(url, { ...options, headers });
+  } catch (_) {
+    throw new Error(
+      'Cannot reach the server. Start node server.js and open http://localhost:3000/.'
+    );
+  }
+
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch (_) {}
+
+  if (!response.ok || data.ok === false) {
+    throw new Error(
+      data.message || data.error || `Request failed (${response.status}).`
+    );
+  }
+
+  return data;
+}
+
+function scrollToStore() {
+  document.getElementById('storeSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToCart() {
+  document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function sortProducts(list) {
+  const rank = new Map(PRODUCT_ORDER.map((id, index) => [id, index]));
+
+  return [...(list || [])].sort((a, b) => {
+    const aRank = rank.has(idOf(a)) ? rank.get(idOf(a)) : 1000;
+    const bRank = rank.has(idOf(b)) ? rank.get(idOf(b)) : 1000;
+    return aRank - bRank;
+  });
+}
+
+function prepareProducts(list) {
+  return sortProducts(list).map(product => {
+    const id = idOf(product);
+    const savedIcon = String(product.icon || product.emoji || '').trim();
+
+    return {
+      ...product,
+      icon: savedIcon || DEFAULT_PRODUCT_ICONS[id] || '🎁'
+    };
+  });
+}
+
+async function loadStore() {
+  const container = document.getElementById('products');
+  container.innerHTML = '<p class="muted">Loading products…</p>';
+
+  try {
+    const data = await api('/api/store');
+
+    products = prepareProducts(data.products || []);
+    currency = data.currency || data.settings?.currency || 'USD';
+    ticketUrl = data.ticketUrl || data.settings?.ticketUrl || '';
+
+    renderProducts();
+    renderCart();
+  } catch (error) {
+    container.innerHTML =
+      '<div class="notice error">Could not load products: ' +
+      esc(error.message) +
+      '</div>';
+  }
+}
+
+function findProduct(id) {
+  return products.find(
+    p => idOf(p) === String(id) && p.active !== false
+  );
+}
+
+function renderProducts() {
+  const container = document.getElementById('products');
+  const visible = sortProducts(products).filter(p => p.active !== false);
+
+  if (!visible.length) {
+    container.innerHTML = '<p class="muted">No products are available right now.</p>';
+    return;
+  }
+
+  container.innerHTML = visible.map(product => `
+    <article class="product">
+      <div class="product-icon">${esc(product.icon || product.emoji || '🎁')}</div>
+      <h3>${esc(product.name)}</h3>
+      <p>${esc(product.description || product.details || '')}</p>
+      <div class="price">${money(product.price)}</div>
+      <button class="primary" onclick="addToCart('${esc(idOf(product))}')">Add to cart</button>
+    </article>
+  `).join('');
+}
+
+function addToCart(id) {
+  if (!findProduct(id)) {
+    alert('This product is unavailable.');
+    return;
+  }
+
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  renderCart();
+}
+
+function changeQuantity(id, amount) {
+  const quantity = (cart[id] || 0) + amount;
+
+  if (quantity <= 0) delete cart[id];
+  else cart[id] = quantity;
+
+  renderCart();
+}
+
+function subtotal() {
+  return Math.round(
+    Object.entries(cart).reduce((sum, [id, quantity]) => {
+      const product = findProduct(id);
+      return sum + (product ? Number(product.price) * quantity : 0);
+    }, 0) * 100
+  ) / 100;
+}
+
+function renderCart() {
+  const container = document.getElementById('cartItems');
+  const entries = Object.entries(cart).filter(
+    ([id, q]) => q > 0 && findProduct(id)
+  );
+
+  document.getElementById('cartCount').textContent =
+    Object.values(cart).reduce((sum, q) => sum + q, 0);
+
+  container.innerHTML = entries.length ? entries.map(([id, quantity]) => {
+    const product = findProduct(id);
+
+    return `
+      <div class="cart-line">
+        <div class="line-info">
+          <strong>${esc(product.name)}</strong><br>
+          <span class="muted">${money(product.price)} each</span>
+        </div>
+        <button class="secondary small-btn" onclick="changeQuantity('${esc(id)}',-1)">−</button>
+        <strong>${quantity}</strong>
+        <button class="secondary small-btn" onclick="changeQuantity('${esc(id)}',1)">+</button>
+        <button class="danger small-btn" onclick="removeFromCart('${esc(id)}')">Remove</button>
+      </div>`;
+  }).join('') : '<p class="muted">Your cart is empty. Add something from the shop!</p>';
+
+  const sub = subtotal();
+  const discountValue = appliedVoucher
+    ? Math.min(
+        sub,
+        Math.round(sub * Number(appliedVoucher.discount) / 100 * 100) / 100
+      )
+    : 0;
+
+  document.getElementById('subtotal').textContent = money(sub);
+  document.getElementById('discount').textContent = '-' + money(discountValue);
+  document.getElementById('total').textContent = money(Math.max(0, sub - discountValue));
+}
+
+/*
+  First, validate the entry as a normal voucher.
+  If it isn't a voucher, ask the server whether it's the admin first-step code.
+  The actual admin password is not written anywhere in this HTML or JavaScript.
+*/
+async function applyVoucher() {
+  const input = document.getElementById('voucherInput');
+  const message = document.getElementById('voucherMessage');
+  const code = input.value.trim();
+
+  message.className = 'muted';
+  message.textContent = '';
+
+  if (!code) {
+    appliedVoucher = null;
+    message.textContent = 'Enter a voucher code first.';
+    renderCart();
+    return;
+  }
+
+  try {
+    const data = await api(
+      '/api/vouchers/validate?code=' + encodeURIComponent(code)
+    );
+
+    const voucher = data.voucher || data;
+
+    if (
+      data.valid === false ||
+      voucher.valid === false ||
+      voucher.active === false ||
+      voucher.disabled === true
+    ) {
+      throw new Error(data.message || 'This voucher is disabled or invalid.');
+    }
+
+    const discount = Number(voucher.discount ?? data.discount);
+
+    if (!Number.isFinite(discount)) {
+      throw new Error('The server did not return a valid discount percentage.');
+    }
+
+    appliedVoucher = { code: voucher.code || code, discount };
+
+    message.className = 'notice good';
+    message.textContent = `Voucher applied: ${discount}% off.`;
+    renderCart();
+  } catch (voucherError) {
+    const openedSignIn = await beginAdminSignIn(code);
+
+    if (openedSignIn) {
+      input.value = '';
+      appliedVoucher = null;
+      renderCart();
+      return;
+    }
+
+    appliedVoucher = null;
+    message.className = 'notice error';
+    message.textContent = voucherError.message || 'Invalid voucher code.';
+    renderCart();
+  }
+}
+
+async function beginAdminSignIn(firstPassword) {
+  try {
+    const data = await api('/api/admin/first-step', {
+      method: 'POST',
+      body: JSON.stringify({ password: firstPassword })
+    });
+
+    adminChallengeToken = data.challengeToken || '';
+
+    if (!adminChallengeToken) {
+      throw new Error('The server did not create a sign-in challenge.');
+    }
+
+    const message = document.getElementById('adminSignInMessage');
+    message.className = 'muted';
+    message.textContent = '';
+
+    document.getElementById('adminSecondPassword').value = '';
+    document.getElementById('adminSignInModal').classList.remove('hidden');
+
+    setTimeout(
+      () => document.getElementById('adminSecondPassword').focus(),
+      0
+    );
+
+    return true;
+  } catch (_) {
+    // Do not disclose which submitted voucher code, if any, was close to the admin code.
+    return false;
+  }
+}
+
+async function submitAdminSignIn(event) {
+  event.preventDefault();
+
+  const input = document.getElementById('adminSecondPassword');
+  const message = document.getElementById('adminSignInMessage');
+  const button = document.getElementById('adminSignInButton');
+  const password = input.value;
+
+  button.disabled = true;
+  button.textContent = 'Signing in…';
+  message.className = 'muted';
+  message.textContent = '';
+
+  try {
+    const data = await api('/api/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        password,
+        challengeToken: adminChallengeToken
+      })
+    });
+
+    adminToken = data.token || data.accessToken || data.adminToken || '';
+
+    if (!adminToken) {
+      throw new Error('The server did not return an admin session.');
+    }
+
+    adminLoggedIn = true;
+    adminChallengeToken = '';
+    input.value = '';
+
+    document.getElementById('adminSignInModal').classList.add('hidden');
+    document.getElementById('adminModal').classList.remove('hidden');
+
+    await loadAdminData();
+  } catch (error) {
+    message.className = 'notice error';
+    message.textContent = error.message;
+    input.value = '';
+    input.focus();
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Sign in';
+  }
+}
+
+function cancelAdminSignIn() {
+  adminChallengeToken = '';
+  document.getElementById('adminSecondPassword').value = '';
+  document.getElementById('adminSignInMessage').textContent = '';
+  document.getElementById('adminSignInModal').classList.add('hidden');
+}
+
+async function closeAdmin() {
+  if (adminToken) {
+    try {
+      await api('/api/admin/logout', {
+        method: 'POST',
+        body: JSON.stringify({})
+      });
+    } catch (_) {}
+  }
+
+  adminLoggedIn = false;
+  adminToken = '';
+  adminChallengeToken = '';
+
+  document.getElementById('adminSecondPassword').value = '';
+  document.getElementById('adminModal').classList.add('hidden');
+  document.getElementById('adminSignInModal').classList.add('hidden');
+}
+
+async function loadAdminData() {
+  if (!adminLoggedIn) return;
+
+  try {
+    const result = await api('/api/admin/data');
+    const data = result.data || result;
+
+    products = prepareProducts(data.products || products);
+    vouchers = data.vouchers || [];
+    orders = data.orders || [];
+    currency = data.currency || data.settings?.currency || currency;
+    ticketUrl = data.settings?.ticketUrl || ticketUrl;
+
+    document.getElementById('ticketUrl').value = ticketUrl;
+
+    renderProducts();
+    renderCart();
+    renderAdmin();
+  } catch (error) {
+    alert('Could not load admin data: ' + error.message);
+  }
+}
+
+function renderAdmin() {
+  document.getElementById('statOrders').textContent = orders.length;
+
+  const completed = orders.filter(order =>
+    String(order.paymentStatus || '').toUpperCase() === 'COMPLETED' ||
+    String(order.status || '').toLowerCase() === 'completed' ||
+    String(order.paymentStatus || '').toUpperCase() === 'FREE'
+  );
+
+  document.getElementById('statSales').textContent =
+    money(completed.reduce((sum, order) => sum + Number(order.total || 0), 0));
+
+  document.getElementById('statVouchers').textContent = vouchers.length;
+
+  document.getElementById('statActiveVouchers').textContent =
+    vouchers.filter(v =>
+      !v.disabled &&
+      v.active !== false &&
+      Number(v.used || v.uses || 0) < Number(v.limit || v.maxUses || 0)
+    ).length;
+
+  renderVoucherTable();
+  renderOrderTable();
+  renderProductAdmin();
+}
+
+async function createVoucher(event) {
+  event.preventDefault();
+
+  const message = document.getElementById('voucherCreateMessage');
+  const code = document.getElementById('newVoucherCode').value.trim();
+  const discount = Number(document.getElementById('newVoucherDiscount').value);
+  const limit = Number(document.getElementById('newVoucherLimit').value);
+  const note = document.getElementById('newVoucherNote').value.trim();
+
+  if (
+    !code ||
+    !Number.isInteger(discount) ||
+    discount < 1 ||
+    discount > 100 ||
+    !Number.isInteger(limit) ||
+    limit < 1
+  ) {
+    message.innerHTML =
+      '<div class="notice error">Check the code, discount and usage limit.</div>';
+    return;
+  }
+
+  try {
+    await api('/api/admin/vouchers', {
+      method: 'POST',
+      body: JSON.stringify({ code, discount, limit, note })
+    });
+
+    event.target.reset();
+    document.getElementById('newVoucherDiscount').value = '10';
+    document.getElementById('newVoucherLimit').value = '1';
+
+    message.innerHTML = '<div class="notice good">Voucher created.</div>';
+    await loadAdminData();
+  } catch (error) {
+    message.innerHTML =
+      '<div class="notice error">' + esc(error.message) + '</div>';
+  }
+}
+
+async function toggleVoucher(id) {
+  const voucher = vouchers.find(v => String(v.id) === String(id));
+  if (!voucher) return;
+
+  const currentlyDisabled = voucher.disabled || voucher.active === false;
+
+  try {
+    await api('/api/admin/vouchers/' + encodeURIComponent(id), {
+      method: 'PATCH',
+      body: JSON.stringify({
+        disabled: !currentlyDisabled,
+        active: currentlyDisabled
+      })
+    });
+
+    await loadAdminData();
+  } catch (error) {
+    alert('Could not update voucher: ' + error.message);
+  }
+}
+
+async function deleteVoucher(id) {
+  const voucher = vouchers.find(v => String(v.id) === String(id));
+
+  if (!voucher || !confirm('Permanently delete voucher ' + voucher.code + '?')) {
+    return;
+  }
+
+  try {
+    await api('/api/admin/vouchers/' + encodeURIComponent(id), {
+      method: 'DELETE'
+    });
+
+    await loadAdminData();
+  } catch (error) {
+    alert('Could not delete voucher: ' + error.message);
+  }
+}
+
+function renderVoucherTable() {
+  const container = document.getElementById('voucherTable');
+
+  if (!vouchers.length) {
+    container.innerHTML = '<p class="muted">No voucher codes yet.</p>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th>Code</th><th>Discount</th><th>Usage</th><th>Status</th><th>Actions</th>
+      </tr></thead>
+      <tbody>${vouchers.map(v => {
+        const used = Number(v.used || v.uses || 0);
+        const limit = Number(v.limit || v.maxUses || 0);
+        const disabled =
+          v.disabled ||
+          v.active === false ||
+          (limit > 0 && used >= limit);
+
+        return `<tr>
+          <td><strong>${esc(v.code)}</strong></td>
+          <td>${Number(v.discount || 0)}%</td>
+          <td>${used} / ${limit || '∞'}</td>
+          <td>
+            <span class="status ${disabled ? 'off' : ''}">
+              ${disabled ? 'Disabled' : 'Active'}
+            </span>
+          </td>
+          <td>
+            <button class="${disabled ? 'success' : 'danger'} small-btn"
+              onclick="toggleVoucher('${esc(v.id)}')">${disabled ? 'Enable' : 'Disable'}</button>
+            <button class="secondary small-btn"
+              onclick="deleteVoucher('${esc(v.id)}')">Delete</button>
+          </td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+}
+
+async function setOrderStatus(id, status) {
+  if (!['Pending','Processing','Completed','Cancelled'].includes(status)) return;
+
+  try {
+    await api('/api/admin/orders/' + encodeURIComponent(id), {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+
+    await loadAdminData();
+  } catch (error) {
+    alert('Could not update order status: ' + error.message);
+  }
+}
+
+function orderDate(order) {
+  const raw = order.createdAt || order.created_at || order.timestamp;
+  if (!raw) return '—';
+
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return String(raw);
+
+  return date.toLocaleString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+}
+
+function orderCode(order) {
+  return order.verificationCode || order.purchaseCode || order.code || 'Pending payment';
+}
+
+function orderItems(order) {
+  return (order.items || []).map(item =>
+    esc(item.name || item.productName || item.id || item.productId || 'Product') +
+    ' × ' + Number(item.quantity || 1)
+  ).join('<br>') || esc(order.productName || '—');
+}
+
+function renderOrderTable() {
+  const container = document.getElementById('orderTable');
+
+  if (!orders.length) {
+    container.innerHTML = '<p class="muted">No orders yet.</p>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th>Time</th><th>Player / Contact</th><th>Products</th>
+        <th>Voucher / discount</th><th>Subtotal / total</th>
+        <th>Verification code</th><th>Status</th>
+      </tr></thead>
+      <tbody>${orders.map(order => {
+        const contact = [order.contactType || '', order.contactValue || '']
+          .filter(Boolean).join(': ');
+        const code = orderCode(order);
+
+        return `<tr>
+          <td>${esc(orderDate(order))}</td>
+          <td>
+            <strong>${esc(order.customerName || '—')}</strong><br>
+            <span class="muted">${esc(contact || 'No contact')}</span>
+          </td>
+          <td>${orderItems(order)}</td>
+          <td>
+            ${esc(order.voucherCode || '—')}<br>
+            <span class="muted">
+              ${Number(order.discountPercent || 0)}% · ${money(order.discount || 0)}
+            </span>
+          </td>
+          <td>
+            <span class="muted">Before: ${money(order.subtotal || 0)}</span><br>
+            <strong>Total: ${money(order.total || 0)}</strong>
+          </td>
+          <td>
+            <strong>${esc(code)}</strong>
+            ${code !== 'Pending payment'
+              ? `<br><button class="secondary small-btn" onclick="copyText('${esc(code)}')">Copy</button>`
+              : ''}
+          </td>
+          <td>
+            <select onchange="setOrderStatus('${esc(order.id)}',this.value)">
+              ${['Pending','Processing','Completed','Cancelled'].map(s =>
+                `<option value="${s}" ${(order.status || 'Pending') === s ? 'selected' : ''}>${s}</option>`
+              ).join('')}
+            </select><br>
+            <span class="muted">${esc(order.paymentStatus || '')}</span>
+          </td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+}
+
+function renderProductAdmin() {
+  const select = document.getElementById('editProductId');
+  const previous = select.value;
+
+  select.innerHTML = '<option value="">Add a new product</option>' +
+    sortProducts(products).map(p =>
+      `<option value="${esc(idOf(p))}">${esc(p.name)}</option>`
+    ).join('');
+
+  if (products.some(p => idOf(p) === previous)) {
+    select.value = previous;
+  }
+
+  const container = document.getElementById('productAdminTable');
+
+  container.innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Product</th><th>Price</th><th>Visibility</th><th>Actions</th></tr></thead>
+      <tbody>${sortProducts(products).map(p => `
+        <tr>
+          <td>${esc(p.icon || p.emoji || '🎁')} ${esc(p.name)}</td>
+          <td>${money(p.price)}</td>
+          <td>
+            <span class="status ${p.active === false ? 'off' : ''}">
+              ${p.active === false ? 'Hidden' : 'Visible'}
+            </span>
+          </td>
+          <td>
+            <button class="secondary small-btn"
+              onclick="document.getElementById('editProductId').value='${esc(idOf(p))}';loadProductForEdit()">Edit</button>
+            <button class="${p.active === false ? 'success' : 'danger'} small-btn"
+              onclick="toggleProduct('${esc(idOf(p))}')">${p.active === false ? 'Show' : 'Hide'}</button>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+function loadProductForEdit() {
+  const id = document.getElementById('editProductId').value;
+  const p = products.find(item => idOf(item) === id);
+
+  document.getElementById('editProductName').value = p?.name || '';
+  document.getElementById('editProductPrice').value = p?.price ?? '';
+  document.getElementById('editProductIcon').value = p?.icon || p?.emoji || '';
+  document.getElementById('editProductDescription').value = p?.description || '';
+}
+
+function resetProductForm() {
+  document.getElementById('productForm').reset();
+  document.getElementById('editProductId').value = '';
+}
+
+async function saveProduct(event) {
+  event.preventDefault();
+
+  const id = document.getElementById('editProductId').value;
+  const name = document.getElementById('editProductName').value.trim();
+  const price = Number(document.getElementById('editProductPrice').value);
+  const icon = document.getElementById('editProductIcon').value.trim();
+  const description = document.getElementById('editProductDescription').value.trim();
+  const existing = products.find(p => idOf(p) === id);
+
+  if (!name || !icon || !Number.isFinite(price) || price < 0) {
+    alert('Enter a name, emoji and valid price.');
+    return;
+  }
+
+  const body = {
+    name,
+    price,
+    icon,
+    description,
+    active: existing ? existing.active !== false : true
+  };
+
+  try {
+    await api('/api/admin/products', {
+      method: 'POST',
+      body: JSON.stringify(id ? { ...body, id } : body)
+    });
+
+    resetProductForm();
+    await loadAdminData();
+    alert('Product saved on the server.');
+  } catch (error) {
+    alert('Could not save product: ' + error.message);
+  }
+}
+
+async function toggleProduct(id) {
+  const p = products.find(product => idOf(product) === String(id));
+  if (!p) return;
+
+  try {
+    await api('/api/admin/products', {
+      method: 'POST',
+      body: JSON.stringify({
+        id,
+        name: p.name,
+        price: p.price,
+        icon: p.icon || p.emoji,
+        description: p.description || '',
+        active: p.active === false
+      })
+    });
+
+    await loadAdminData();
+  } catch (error) {
+    alert('Could not change product visibility: ' + error.message);
+  }
+}
+
+function downloadBlob(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+function exportDataJSON() {
+  if (!adminLoggedIn) return;
+
+  downloadBlob(
+    'nexus-store-backup.json',
+    JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      products,
+      vouchers,
+      orders,
+      settings: { ticketUrl }
+    }, null, 2),
+    'application/json'
+  );
+}
+
+function exportOrdersCSV() {
+  if (!adminLoggedIn) return;
+
+  const columns = [
+    'createdAt','customerName','contactType','contactValue',
+    'products','voucherCode','discountPercent','subtotal',
+    'discount','total','verificationCode','status','paymentStatus'
+  ];
+
+  const rows = orders.map(o => ({
+    createdAt: orderDate(o),
+    customerName: o.customerName || '',
+    contactType: o.contactType || '',
+    contactValue: o.contactValue || '',
+    products: (o.items || []).map(i =>
+      `${i.name || i.id || ''} x${i.quantity || 1}`
+    ).join('; '),
+    voucherCode: o.voucherCode || '',
+    discountPercent: o.discountPercent ?? '',
+    subtotal: o.subtotal ?? '',
+    discount: o.discount ?? '',
+    total: o.total ?? '',
+    verificationCode: orderCode(o),
+    status: o.status || '',
+    paymentStatus: o.paymentStatus || ''
+  }));
+
+  const cell = value => '"' + String(value ?? '').replace(/"/g, '""') + '"';
+
+  downloadBlob(
+    'nexus-store-orders.csv',
+    [
+      columns.join(','),
+      ...rows.map(row => columns.map(c => cell(row[c])).join(','))
+    ].join('\r\n'),
+    'text/csv;charset=utf-8'
+  );
+}
+
+async function copyText(value) {
+  try {
+    await navigator.clipboard.writeText(String(value));
+    alert('Copied.');
+  } catch (_) {
+    prompt('Copy this code:', String(value));
+  }
+}
+
+async function copyOrderCode() {
+  if (currentPurchaseCode) {
+    await copyText(currentPurchaseCode);
+  }
+}
+
+async function saveTicketLink() {
+  const value = document.getElementById('ticketUrl').value.trim();
+
+  if (value) {
+    try {
+      const url = new URL(value);
+      if (!['https:', 'http:'].includes(url.protocol)) throw new Error();
+    } catch (_) {
+      alert('Enter a valid HTTP or HTTPS ticket URL.');
+      return;
+    }
+  }
+
+  try {
+    await api('/api/admin/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ ticketUrl: value })
+    });
+
+    ticketUrl = value;
+    alert('Ticket link saved.');
+  } catch (error) {
+    alert('Could not save ticket link: ' + error.message);
+  }
+}
+
+function openTicket() {
+  const message = document.getElementById('ticketMessage');
+
+  if (ticketUrl) {
+    window.open(ticketUrl, '_blank', 'noopener,noreferrer');
+    message.textContent = 'Include your verification code in the Discord ticket.';
+  } else {
+    message.textContent =
+      'Open a ticket in Discord and include this code: ' + currentPurchaseCode;
+  }
+}
+
+/* ---------------- Checkout ---------------- */
+
+async function checkout() {
+  const entries = Object.entries(cart).filter(
+    ([id, q]) => q > 0 && findProduct(id)
+  );
+
+  if (!entries.length) {
+    alert('Your cart is empty.');
+    return;
+  }
+
+  const customerName = document.getElementById('customerName').value.trim();
+  const contactType = document.getElementById('contactType').value;
+  const contactValue = document.getElementById('customerContact').value.trim();
+
+  if (!customerName) return alert('Enter your Minecraft username.');
+  if (!contactValue) return alert('Enter your Discord username or email.');
+
+  const button = document.getElementById('checkoutButton');
+  const message = document.getElementById('paymentMessage');
+
+  button.disabled = true;
+  button.textContent = 'Creating secure checkout…';
+  message.className = 'muted';
+  message.textContent = '';
+
+  try {
+    const result = await api('/api/create-order', {
+      method: 'POST',
+      body: JSON.stringify({
+        items: entries.map(([id, quantity]) => ({ id, quantity })),
+        customerName,
+        contactType,
+        contactValue,
+        voucherCode: appliedVoucher?.code || ''
+      })
+    });
+
+    if (result.freeOrder) {
+      showOrderSuccess(result.order || result);
+      return;
+    }
+
+    if (!result.approvalUrl) {
+      throw new Error('The server did not return a PayPal approval URL.');
+    }
+
+    sessionStorage.setItem(
+      'nexusPendingOrderID',
+      result.orderID || result.id || ''
+    );
+
+    window.location.href = result.approvalUrl;
+  } catch (error) {
+    message.className = 'notice error';
+    message.textContent = 'Checkout failed: ' + error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Continue to PayPal';
+  }
+}
+
+function showOrderSuccess(order) {
+  currentPurchaseCode =
+    order.verificationCode || order.purchaseCode || order.code || '';
+
+  document.getElementById('orderCode').textContent =
+    currentPurchaseCode || 'Your order has been received';
+
+  document.getElementById('orderResult').classList.remove('hidden');
+
+  const message = document.getElementById('paymentMessage');
+  message.className = 'notice good';
+  message.textContent = 'Thank you! Your order has been recorded.';
+
+  document.getElementById('orderResult').scrollIntoView({ behavior: 'smooth' });
+
+  cart = {};
+  appliedVoucher = null;
+  document.getElementById('voucherInput').value = '';
+
+  renderCart();
+}
+
+async function handlePayPalReturn() {
+  const url = new URL(window.location.href);
+
+  if (url.searchParams.get('paypal') === 'cancel') {
+    const message = document.getElementById('paymentMessage');
+    message.className = 'notice';
+    message.textContent = 'Payment was cancelled. No order was marked as paid.';
+
+    url.searchParams.delete('paypal');
+    url.searchParams.delete('token');
+
+    history.replaceState({}, '', url.pathname + url.search + url.hash);
+    sessionStorage.removeItem('nexusPendingOrderID');
+    return;
+  }
+
+  if (
+    url.searchParams.get('paypal') !== 'success' &&
+    !url.searchParams.has('token')
+  ) {
+    return;
+  }
+
+  const orderID = url.searchParams.get('token') ||
+    sessionStorage.getItem('nexusPendingOrderID');
+
+  if (!orderID) return;
+
+  const message = document.getElementById('paymentMessage');
+  message.className = 'notice';
+  message.textContent = 'Verifying your PayPal payment…';
+
+  try {
+    const result = await api('/api/capture-order', {
+      method: 'POST',
+      body: JSON.stringify({ orderID })
+    });
+
+    showOrderSuccess(result.order || result);
+    sessionStorage.removeItem('nexusPendingOrderID');
+
+    url.searchParams.delete('paypal');
+    url.searchParams.delete('token');
+
+    history.replaceState({}, '', url.pathname + url.search + url.hash);
+  } catch (error) {
+    message.className = 'notice error';
+    message.textContent =
+      'Payment confirmation could not be verified: ' + error.message +
+      '. If PayPal charged you, do not pay again; contact support.';
+  }
+}
+
+async function initialize() {
+  await loadStore();
+  await handlePayPalReturn();
+}
+
+initialize();
+</script>
+</body>
+</html>

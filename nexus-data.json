@@ -1,0 +1,294 @@
+{
+  "version": 2,
+  "settings": {
+    "ticketUrl": "https://discord.com",
+    "currency": "USD",
+    "currencySymbol": "$"
+  },
+  "products": [
+    {
+      "id": "nexus-plus",
+      "name": "Nexus+",
+      "price": 4.99,
+      "emoji": "💜",
+      "description": "Nexus package",
+      "active": true,
+      "icon": "💜"
+    },
+    {
+      "id": "nexus-plus-plus",
+      "name": "Nexus++",
+      "price": 9.99,
+      "emoji": "⚡",
+      "description": "Enhanced Nexus package",
+      "active": true
+    },
+    {
+      "id": "nexus-plus-triple",
+      "name": "Nexus+++",
+      "price": 19.99,
+      "emoji": "👑",
+      "description": "Premium Nexus package",
+      "active": true
+    },
+    {
+      "id": "elytra",
+      "name": "Elytra",
+      "price": 4.99,
+      "emoji": "🪽",
+      "description": "Elytra item",
+      "active": true
+    },
+    {
+      "id": "common-key",
+      "name": "Common Key",
+      "price": 0.99,
+      "emoji": "🗝️",
+      "description": "Common key",
+      "active": true
+    },
+    {
+      "id": "amethyst-key",
+      "name": "Amethyst Key",
+      "price": 1.99,
+      "emoji": "🔮",
+      "description": "Amethyst key",
+      "active": true
+    },
+    {
+      "id": "crimson-key",
+      "name": "Crimson Key",
+      "price": 2.49,
+      "emoji": "🟥",
+      "description": "Crimson key",
+      "active": true
+    },
+    {
+      "id": "prime-key",
+      "name": "Prime Key",
+      "price": 3.49,
+      "emoji": "💎",
+      "description": "Prime key",
+      "active": true
+    },
+    {
+      "id": "gold-key",
+      "name": "Gold Key",
+      "price": 4.99,
+      "emoji": "🪙",
+      "description": "Gold key",
+      "active": true
+    }
+  ],
+  "vouchers": [],
+  "orders": [],
+  "pendingPayments": [
+    {
+      "id": "ORDER-9abc52b7-a1ff-47fb-a50a-42cd20099d5e",
+      "customerName": "Boody4020",
+      "contactType": "discord",
+      "contactValue": "Boody_4020",
+      "items": [
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 1,
+          "lineTotal": 4.99
+        }
+      ],
+      "subtotal": 4.99,
+      "voucherCode": null,
+      "discountPercent": 0,
+      "discount": 0,
+      "total": 4.99,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T08:22:01.432Z",
+      "paypalOrderID": "1GY85714SV855513K"
+    },
+    {
+      "id": "ORDER-e2eee078-5780-4de8-9aef-9c5f28804be1",
+      "customerName": "Boody4020",
+      "contactType": "discord",
+      "contactValue": "Boody_4020",
+      "items": [
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 8,
+          "lineTotal": 39.92
+        }
+      ],
+      "subtotal": 39.92,
+      "voucherCode": null,
+      "discountPercent": 0,
+      "discount": 0,
+      "total": 39.92,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T08:56:22.489Z",
+      "paypalOrderID": "4E616155BB895460H"
+    },
+    {
+      "id": "ORDER-d96289a9-900f-4173-ba84-cd43ba65f738",
+      "customerName": "Boody4020",
+      "contactType": "discord",
+      "contactValue": "Boody_4020",
+      "items": [
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 5,
+          "lineTotal": 24.95
+        }
+      ],
+      "subtotal": 24.95,
+      "voucherCode": null,
+      "discountPercent": 0,
+      "discount": 0,
+      "total": 24.95,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T10:03:15.617Z",
+      "paypalOrderID": "22E49149XL117553M"
+    },
+    {
+      "id": "ORDER-f9a0172e-62a5-4529-b69b-68b1fc6d17dd",
+      "customerName": "rrkg",
+      "contactType": "discord",
+      "contactValue": "BOody4-jq",
+      "items": [
+        {
+          "id": "amethyst-key",
+          "name": "Amethyst Key",
+          "unitPrice": 1.99,
+          "quantity": 1,
+          "lineTotal": 1.99
+        },
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 2,
+          "lineTotal": 9.98
+        }
+      ],
+      "subtotal": 11.97,
+      "voucherCode": null,
+      "discountPercent": 0,
+      "discount": 0,
+      "total": 11.97,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T10:46:10.036Z",
+      "paypalOrderID": "9PK65111YA503490M"
+    },
+    {
+      "id": "ORDER-0aae00e1-4cc1-42c7-abdc-80e91c700075",
+      "customerName": "Boody4020",
+      "contactType": "discord",
+      "contactValue": "Boody_4020",
+      "items": [
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 18,
+          "lineTotal": 89.82
+        }
+      ],
+      "subtotal": 89.82,
+      "voucherCode": null,
+      "discountPercent": 0,
+      "discount": 0,
+      "total": 89.82,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T16:43:28.609Z",
+      "paypalOrderID": "0R597962WH9726318"
+    },
+    {
+      "id": "ORDER-bd55f99d-0ca8-4ad2-9fd9-adefa4da9171",
+      "customerName": "Boody4020",
+      "contactType": "discord",
+      "contactValue": "Boody_4020",
+      "items": [
+        {
+          "id": "gold-key",
+          "name": "Gold Key",
+          "unitPrice": 4.99,
+          "quantity": 1,
+          "lineTotal": 4.99
+        },
+        {
+          "id": "nexus-plus",
+          "name": "Nexus+",
+          "unitPrice": 4.99,
+          "quantity": 1,
+          "lineTotal": 4.99
+        },
+        {
+          "id": "nexus-plus-plus",
+          "name": "Nexus++",
+          "unitPrice": 9.99,
+          "quantity": 1,
+          "lineTotal": 9.99
+        },
+        {
+          "id": "nexus-plus-triple",
+          "name": "Nexus+++",
+          "unitPrice": 19.99,
+          "quantity": 1,
+          "lineTotal": 19.99
+        },
+        {
+          "id": "elytra",
+          "name": "Elytra",
+          "unitPrice": 4.99,
+          "quantity": 1,
+          "lineTotal": 4.99
+        },
+        {
+          "id": "common-key",
+          "name": "Common Key",
+          "unitPrice": 0.99,
+          "quantity": 1,
+          "lineTotal": 0.99
+        },
+        {
+          "id": "amethyst-key",
+          "name": "Amethyst Key",
+          "unitPrice": 1.99,
+          "quantity": 1,
+          "lineTotal": 1.99
+        },
+        {
+          "id": "crimson-key",
+          "name": "Crimson Key",
+          "unitPrice": 2.49,
+          "quantity": 1,
+          "lineTotal": 2.49
+        },
+        {
+          "id": "prime-key",
+          "name": "Prime Key",
+          "unitPrice": 3.49,
+          "quantity": 1,
+          "lineTotal": 3.49
+        }
+      ],
+      "subtotal": 53.91,
+      "voucherCode": "knjsbB^YDV",
+      "discountPercent": 14,
+      "discount": 7.55,
+      "total": 46.36,
+      "currency": "USD",
+      "status": "Pending",
+      "createdAt": "2026-10-25T17:03:48.690Z",
+      "paypalOrderID": "1K9977251D9475416"
+    }
+  ]
+}
