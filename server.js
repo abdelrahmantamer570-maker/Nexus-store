@@ -25,6 +25,8 @@ const PAYPAL_API =
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID || '';
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET || '';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_SECOND_PASSWORD = process.env.ADMIN_SECOND_PASSWORD || '';
+
 
 const CURRENCY = /^[A-Z]{3}$/.test(
   String(process.env.STORE_CURRENCY || 'USD').toUpperCase()
@@ -359,7 +361,35 @@ function readHiddenSecret(promptText) {
 async function configureSecondAdminPassword() {
   if (!ADMIN_PASSWORD) {
     throw new Error(
-      'ADMIN_PASSWORD is missing from .env. Set ADMIN_PASSWORD in .env before starting the server.'
+      'ADMIN_PASSWORD is missing. Set ADMIN_PASSWORD in the environment before starting the server.'
+    );
+  }
+
+  /*
+   * Production/hosting mode:
+   * Render and other cloud hosts do not provide an interactive terminal.
+   * Use ADMIN_SECOND_PASSWORD from the environment instead of prompting.
+   */
+  if (ADMIN_SECOND_PASSWORD) {
+    if (ADMIN_SECOND_PASSWORD.length > 200) {
+      throw new Error(
+        'ADMIN_SECOND_PASSWORD must contain 1 to 200 characters.'
+      );
+    }
+
+    adminSecondPasswordHash = hashSecret(ADMIN_SECOND_PASSWORD);
+    console.log('Second admin code loaded from environment.');
+    return;
+  }
+
+  /*
+   * Local development fallback:
+   * If no second code is supplied, keep the original interactive setup
+   * for a normal VS Code terminal.
+   */
+  if (!process.stdin.isTTY || typeof process.stdin.setRawMode !== 'function') {
+    throw new Error(
+      'ADMIN_SECOND_PASSWORD is missing. Set it in your hosting environment, or start the server in a normal VS Code terminal to create it interactively.'
     );
   }
 
@@ -1369,7 +1399,7 @@ app.use((error, req, res, next) => {
 async function startServer() {
   await configureSecondAdminPassword();
 
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Nexus Store running at ${BASE_URL}`);
     console.log(`Website folder: ${PUBLIC_DIR}`);
     console.log(`Product API: ${BASE_URL}/api/store`);
